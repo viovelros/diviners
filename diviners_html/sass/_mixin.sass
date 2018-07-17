@@ -1,0 +1,227 @@
+// ***** STRING REPLACE
+@function str-replace($string, $search, $replace: "")
+	$index: str-index($string, $search)
+
+	@if $index
+		@return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace)
+
+	@return $string
+
+//==============================================================================
+//==============================================================================
+
+// ***** FONT FACE
+=font-face($name, $path, $weight: null, $style: null, $exts: eot woff2 woff ttf svg)
+	$src: null
+
+	$extmods: (eot: "?", svg: "#" + str-replace($name, " ", "_"))
+
+	$formats: (otf: "opentype", ttf: "truetype")
+
+	@each $ext in $exts
+		$extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext)
+		$format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext)
+		$src: append($src, url(quote($path + "." + $extmod)) format(quote($format)), comma)
+
+	@font-face
+		font-family: quote($name)
+		font-style: $style
+		font-weight: $weight
+		src: $src
+
+// Ex.
+//+font-face("Font Name", 'path/font_name', normal, normal, eot woff otf ttf)
+
+//==============================================================================
+//==============================================================================
+
+// ***** MEDIA
+$media-types: (xl: 1440px, lg:1200px, md:992px, sm:768px, xs:576px, xs-640:640px, xs-480:480px, xs-414:414px, xs-360:360px, emp:0)
+
+=media($media_min, $media_max, $type)
+	@if $media_max == emp
+		@if $type == -1
+			@media screen and (max-width +':' #{map-get($media-types, $media_min) - 1})
+				@content
+		@else if $type == 1
+			@media screen and (max-width +':' #{map-get($media-types, $media_min)})
+				@content
+		@else
+			@media screen and (min-width +':' #{map-get($media-types, $media_min)})
+				@content
+	@else
+		@media screen and (min-width +':' #{map-get($media-types, $media_min)}) and (max-width +':' #{map-get($media-types, $media_max) - 1})
+			@content
+// Ex.
+// +media(md,lg,0) => @media screen and (min-width: 992px) and (max-width: 1199px)
+// +media(md,emp,0) => @media screen and (min-width: 992px)
+// +media(md,emp,1) => @media screen and (max-width: 992px)
+// +media(md,emp,-1) => @media screen and (max-width: 991px)
+
+
+// =media($media, $type)
+// 	@if $type == -1
+// 		@media screen and (if(map-has-key($media-types, $media), max-width +':' #{map-get($media-types, $media) - 1}, 0))
+// 			@content
+// 	@else
+// 		@media screen and (if(map-has-key($media-types, $media), min-width +':' #{map-get($media-types, $media)}, 0))
+// 			@content
+// Ex.
+//+media(xs-360, -1)
+//	.a
+//		color: #333
+
+
+//media robot
+//sm - 576
+=max-sm()
+	@media screen and (max-width: 575px)
+		@content
+
+=min-sm()
+	@media screen and (min-width: 576px)
+		@content
+
+
+// md - 768
+=max-md()
+	@media screen and (max-width: 767px)
+		@content
+
+=min-md()
+	@media screen and (min-width: 768px)
+		@content
+
+// lg - 992
+=max-lg()
+	@media screen and (max-width: 991px)
+		@content
+
+=min-lg()
+	@media screen and (min-width: 992px)
+		@content
+
+// xl - 1200
+=max-xl()
+	@media screen and (max-width: 1199px)
+		@content
+
+=min-xl()
+	@media screen and (min-width: 1200px)
+		@content
+
+
+=max($screen)
+	@media screen and (max-width: $screen)
+		@content
+
+=min($screen)
+	@media screen and (min-width: $screen)
+		@content
+		
+
+//==============================================================================
+//==============================================================================
+
+// ***** IMAGE BOX
+=img_box ($w, $h)
+	position: relative
+	display: block
+	width: 100%
+	padding-bottom: #{(($h*100))/$w*1%}
+
+//==============================================================================
+//==============================================================================
+
+// ***** ARROW
+=arrow($dir, $size, $color)
+	height: 0
+	width: 0
+	border-style: solid
+	border-width: $size
+	border-color: transparent
+	display: block
+
+	@if $dir == "top"
+		border-top: 0
+		border-bottom-color: $color
+	@else if $dir == "right"
+		border-right: 0
+		border-left-color: $color
+	@else if $dir == "bottom"
+		border-bottom: 0
+		border-top-color: $color
+	@else if $dir == "left"
+		border-left: 0
+		border-right-color: $color
+// Ex.
+//.a
+//	+arrow(top, 5px, red)
+
+// ***** BUTTON RESET
+=btn-reset()
+	background-color: transparent
+	border: none
+	padding: 0
+
+//==============================================================================
+//==============================================================================
+
+=clear()
+	&:after
+		content: ""
+		display: table
+		clear: both
+
+=align($dir)
+	position: absolute
+
+	@if $dir == "cen"
+		top: 50%
+		left: 50%
+		transform: translate(-50%, -50%)
+	@else if $dir == "ver"
+		top: 50%
+		transform: translateY(-50%)
+	@else if $dir == "hor"
+		left: 50%
+		transform: translateX(-50%)
+
+	@else if $dir == "hor-left"
+		left: 0
+		top: 50%
+		transform: translateY(-50%)
+
+	@else if $dir == "hor-right"
+		right: 0
+		top: 50%
+		transform: translateY(-50%)
+
+	@else if $dir == "ver-top"
+		left: 50%
+		top: 0
+		transform: translateX(-50%)
+
+	@else if $dir == "ver-bot"
+		left: 50%
+		bottom: 0
+		transform: translateX(-50%)
+
+//==============================================================================
+//==============================================================================
+
+// ***** BOX IF LARGER THAN 1400PX
+=box-xl()
+	+media(xl,emp,0)
+		width: 1400px
+		margin:
+			left: auto
+			right: auto
+
+
+
+
+=nowrap
+	overflow: hidden
+	white-space: nowrap
+	text-overflow: ellipsis

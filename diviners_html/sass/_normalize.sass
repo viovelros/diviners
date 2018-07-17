@@ -1,0 +1,177 @@
+//general
++font-face('artbrush', '../fonts/artbrush', normal, normal, woff)
++font-face('uvndalat', '../fonts/uvndalat', normal, normal, woff)
++font-face('tuv-montserrat-regular', '../fonts/tuv-montserrat-regular', normal, normal, woff)
+
+//fonts
+$f-art: 'artbrush'
+$f-dl: 'uvndalat'
+$f-monster-r: 'tuv-montserrat-regular'
+$f-arial: 'Arial'
+
+//fonts class
+.f-art
+	font-family: $f-art
+
+.f-dl
+	font-family: $f-dl
+
+.f-arial
+	font-family: $f-arial
+
+.f-monster-r
+	font-family: $f-monster-r
+
+button
+	cursor: pointer
+
+	&:focus
+		outline: none
+
+a
+	transition: all 250ms
+	cursor: pointer
+	color: inherit
+
+	&:hover,
+	&:focus
+		text-decoration: none
+		color: inherit
+
+*
+	outline: none
+
+ul 
+	padding-left: 0
+	margin-bottom: 0
+	list-style: none
+
+.form-control:focus
+	box-shadow: none
+
+figure
+	margin: 0
+
+img
+	max-width: 100%
+	max-height: 100%
+
+textarea
+	resize: none
+
+body
+	overflow-x: hidden
+
+// OWL CAROUSEL
+.owl-carousel
+	.owl
+		&-nav
+			+align(cen)
+			height: 0
+			width: 95%
+
+			+min-sm
+				width: 576px
+
+			+min-md
+				width: 768px
+
+			+min-lg
+				width: 992px
+
+			+min-xl
+				width: 1200px
+
+
+			&.disabled
+				display: none
+
+		&-prev,
+		&-next
+			top: -20px
+			position: absolute
+			height: 40px
+			width: 40px
+			background-color: #fff !important
+			border-radius: 50%
+			display: flex
+			justify-content: center
+			align-items: center
+			color: #aaa !important
+			// opacity: 0
+			transition: all 400ms
+			border: none
+			padding: 0
+			font-size: 20px
+
+			&:before
+				font-family: "Font Awesome 5 Solid"
+				display: none
+
+			&:hover
+				background-color: $cl_main !important
+				color: #fff !important
+				box-shadow: 0 0 15px -2px #fff
+
+
+		&-prev
+			+min-lg
+				left: -40px
+				opacity: 0
+
+			&:before
+				content: "\f053"
+
+		&-next
+			right: 0
+			
+			+min-lg
+				right: -40px
+				opacity: 0
+
+			&:before
+				content: "\f054"
+
+		&-dots
+			+align(hor)
+			+clear()
+			bottom: 20px
+
+			&.disabled
+				display: none
+
+		&-dot
+			background-color: rgba(255,255,255,.6)
+			height: 12px
+			width: 12px
+			border-radius: 50%
+			float: left
+			margin-right: 10px
+
+			&:last-child
+				margin-right: 0
+
+			&.active
+				background-color: #fff
+
+	&.without
+		&-dots
+			.owl-dots
+				display: none !important
+
+		&-nav
+			.owl-nav
+				display: none !important
+
+	&:hover
+		.owl
+			&-prev,
+			&-next
+				opacity: 1
+
+			&-prev
+				left: 0
+
+			&-next
+				right: 0
+
